@@ -16,6 +16,7 @@ public class BibliotecaApp {
     }
 
     public void start() {
-        this.out.println("Welcome to Biblioteca. Your one-stop shop for great book titles in Stevensville.");
+        out.println("Welcome to Biblioteca. Your one-stop shop for great book titles in Stevensville.");
+        out.println("1984");
     }
 }
