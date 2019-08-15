@@ -11,6 +11,8 @@ public class BibliotecaApp {
     }
 
     public static void main(String[] args) {
+        BibliotecaApp app = new BibliotecaApp(new PrintStream(System.out));
+        app.start();
     }
 
     public void start() {
