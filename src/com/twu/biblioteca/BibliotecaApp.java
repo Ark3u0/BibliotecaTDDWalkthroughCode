@@ -18,5 +18,7 @@ public class BibliotecaApp {
     public void start() {
         out.println("Welcome to Biblioteca. Your one-stop shop for great book titles in Stevensville.");
         out.println("1984");
+        out.println("Crazy Rich Asians");
+        out.println("Who Fears Death");
     }
 }

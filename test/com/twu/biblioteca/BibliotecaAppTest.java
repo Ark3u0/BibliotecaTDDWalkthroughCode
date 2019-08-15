@@ -39,4 +39,14 @@ public class BibliotecaAppTest {
         assertThat(outputStream.toString(), containsString(expected));
     }
 
+    @Test
+    public void shouldPrintTwoBookTitlesWhenIStartTheApp() throws IOException {
+        app.start();
+
+        String expected = "Crazy Rich Asians";
+        String expected2 = "Who Fears Death";
+        assertThat(outputStream.toString(), containsString(expected));
+        assertThat(outputStream.toString(), containsString(expected2));
+    }
+
 }
