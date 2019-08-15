@@ -4,8 +4,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
-
 public class BibliotecaApp {
 
     private PrintStream out;
@@ -31,7 +29,7 @@ public class BibliotecaApp {
 
     public void listBooks(final List<Book> books) {
         for (Book book : books) {
-            out.println(String.join(", ", book.getTitle(), book.getAuthor(), Integer.toString(book.getYear())));
+            out.println(book.toString());
         }
     }
 }

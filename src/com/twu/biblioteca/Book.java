@@ -22,4 +22,12 @@ public class Book {
     public String getAuthor() {
         return author;
     }
+
+    @Override
+    public String toString() {
+        return String.join(", ",
+                title,
+                author,
+                Integer.toString(year));
+    }
 }
