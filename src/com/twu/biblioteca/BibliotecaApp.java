@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import java.io.PrintStream;
+import java.util.List;
 
 public class BibliotecaApp {
 
@@ -17,8 +18,11 @@ public class BibliotecaApp {
 
     public void start() {
         out.println("Welcome to Biblioteca. Your one-stop shop for great book titles in Stevensville.");
-        out.println("1984");
-        out.println("Crazy Rich Asians");
-        out.println("Who Fears Death");
+    }
+
+    public void listBooks(final List<String> titles) {
+        for (String title : titles) {
+            out.println(title);
+        }
     }
 }

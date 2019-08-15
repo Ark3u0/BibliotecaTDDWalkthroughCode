@@ -4,10 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class BibliotecaAppTest {
@@ -16,8 +18,7 @@ public class BibliotecaAppTest {
     private ByteArrayOutputStream outputStream;
 
     @Before
-    public void setUp() 
-    {
+    public void setUp() {
         outputStream = new ByteArrayOutputStream();
         final PrintStream out = new PrintStream(outputStream);
         app = new BibliotecaApp(out);
@@ -27,26 +28,45 @@ public class BibliotecaAppTest {
     public void shouldShowWelcomeMessageWhenIStartTheApp() {
         app.start();
 
-        String expected = "Welcome to Biblioteca. Your one-stop shop for great book titles in Stevensville.\n";
-        assertThat(outputStream.toString(), containsString(expected));
+        String expected = "Welcome to Biblioteca. Your one-stop shop for great book titles in Stevensville.";
+
+        String output = outputStream.toString();
+        String[] lines = output.split("\n");
+
+        assertThat(lines[0], is(expected));
     }
 
     @Test
-    public void shouldPrintABookTitleWhenIStartTheApp() throws IOException {
-        app.start();
+    public void shouldPrintABookTitleWhenIStartTheApp() {
+        List<String> titles = new ArrayList<String>();
 
         String expected = "1984";
-        assertThat(outputStream.toString(), containsString(expected));
+
+        titles.add(expected);
+
+        app.listBooks(titles);
+
+        String output = outputStream.toString();
+        List<String> books = Arrays.asList(output.split("\n"));
+
+        assertThat(books, is(titles));
     }
 
     @Test
-    public void shouldPrintTwoBookTitlesWhenIStartTheApp() throws IOException {
-        app.start();
+    public void shouldPrintTwoBookTitlesWhenIStartTheApp() {
+        List<String> titles = new ArrayList<String>();
 
         String expected = "Crazy Rich Asians";
         String expected2 = "Who Fears Death";
-        assertThat(outputStream.toString(), containsString(expected));
-        assertThat(outputStream.toString(), containsString(expected2));
-    }
 
+        titles.add(expected);
+        titles.add(expected2);
+
+        app.listBooks(titles);
+
+        String output = outputStream.toString();
+        List<String> books = Arrays.asList(output.split("\n"));
+
+        assertThat(books, is(titles));
+    }
 }
