@@ -8,33 +8,41 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static java.util.Collections.emptyList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class BibliotecaAppTest {
 
     private BibliotecaApp app;
     private ByteArrayOutputStream outputStream;
+    private PrintStream mockPrintStream;
+    private ScannerWrapper mockScannerWrapper;
 
     @Before
     public void setUp() {
         outputStream = new ByteArrayOutputStream();
         final PrintStream out = new PrintStream(outputStream);
-        app = new BibliotecaApp(out);
+        mockPrintStream = mock(PrintStream.class);
+        mockScannerWrapper = mock(ScannerWrapper.class);
+
+        when(mockScannerWrapper.nextLine()).thenReturn("2");
+
     }
 
     @Test
     public void shouldShowWelcomeMessageWhenIStartTheApp() {
+        app = new BibliotecaApp(mockPrintStream, mockScannerWrapper, emptyList());
+
+        when(mockScannerWrapper.nextLine()).thenReturn("2");
+
         app.start();
 
         String expected = "Welcome to Biblioteca. Your one-stop shop for great book titles in Stevensville.";
 
-        String output = outputStream.toString();
-        String[] lines = output.split("\n");
-
-        assertThat(lines[0], is(expected));
+        verify(mockPrintStream).println(expected);
     }
 
     @Test
@@ -47,12 +55,12 @@ public class BibliotecaAppTest {
         books.add(book);
         books.add(book2);
 
+        app = new BibliotecaApp(mockPrintStream, mockScannerWrapper, books);
+
         app.listBooks(books);
 
-        String output = outputStream.toString();
-        List<String> writtenBooks = asList(output.split("\n"));
-
-        assertThat(writtenBooks, is(asList(book.toString(), book2.toString())));
+        verify(mockPrintStream).println(book.toString());
+        verify(mockPrintStream).println(book2.toString());
     }
 
     @Test
@@ -63,11 +71,46 @@ public class BibliotecaAppTest {
 
         books.add(expectedBook);
 
+        app = new BibliotecaApp(mockPrintStream, mockScannerWrapper, books);
+
         app.listBooks(books);
 
-        String output = outputStream.toString();
-        List<String> booksWritten = asList(output.split("\n"));
+        verify(mockPrintStream).println(expectedBook.toString());
+    }
 
-        assertThat(booksWritten, is(singletonList(expectedBook.toString())));
+    @Test
+    public void shouldNotListBooksWhen2IsEnteredAsInput() {
+        when(mockScannerWrapper.nextLine()).thenReturn("2");
+
+        List<Book> books = new ArrayList<Book>();
+
+        Book expectedBook = new Book("1984", "George Orwell", 1961);
+
+        books.add(expectedBook);
+
+        app = new BibliotecaApp(mockPrintStream, mockScannerWrapper, books);
+
+        app.start();
+
+        verify(mockPrintStream, never()).println(expectedBook.toString());
+
+    }
+
+    @Test
+    public void shouldNotListBooksWhen1IsEnteredAsInput() {
+        when(mockScannerWrapper.nextLine()).thenReturn("1");
+
+        List<Book> books = new ArrayList<Book>();
+
+        Book expectedBook = new Book("1984", "George Orwell", 1961);
+
+        books.add(expectedBook);
+
+        app = new BibliotecaApp(mockPrintStream, mockScannerWrapper, books);
+
+        app.start();
+
+        verify(mockPrintStream).println(expectedBook.toString());
+
     }
 }
